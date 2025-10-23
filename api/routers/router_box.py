@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-router = APIRouter(prefix="/box")
+router = APIRouter(prefix="/box", tags=["Boxes"])
 
 
 @router.get("/all")
