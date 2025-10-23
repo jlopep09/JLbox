@@ -1,0 +1,6 @@
+python-dotenv
+mariadb
+pydantic
+gunicorn
+uvicorn
+fastapi[standard]
