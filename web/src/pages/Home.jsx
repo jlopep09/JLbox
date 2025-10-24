@@ -2,8 +2,8 @@ import React from 'react'
 
 const Home = () => {
   return (
-    <div className='flex flex-col justify-center align-middle items-center min-h-full mt-8'>
-        <section className='grid grid-cols-3 w-4xl gap-2 p-8 shadow-sm'>
+    <div className='flex flex-col justify-center align-middle items-center min-h-full min-w-md sm:w-lg md:w-2xl lg:w-4xl xl:w-5xl'>
+        <section className='grid grid-cols-3 w-full gap-2 p-8 shadow-sm'>
             <WarehouseCard></WarehouseCard>
             <WarehouseCard></WarehouseCard>
             <WarehouseCard></WarehouseCard>
@@ -13,9 +13,9 @@ const Home = () => {
         </section>
 
         
-        <section className='flex flex-col w-4xl mt-8 pt-4 p-8 shadow-sm'>
+        <section className='flex flex-col w-full mt-8 pt-4 p-8 shadow-sm'>
             <ItemsGridHeader></ItemsGridHeader>
-            <article className='grid grid-cols-4 gap-2'>
+            <article className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 gap-2'>
                 <ItemCard></ItemCard>
                 <ItemCard></ItemCard>
                 <ItemCard></ItemCard>
@@ -67,7 +67,7 @@ function ItemCard() {
         <div className='bg-neutral-200 h-45 flex flex-col w-full justify-center a'>
         </div>
         <div className='bg-neutral-300 h-15 flex flex-col w-full justify-center a'>
-            <p className='text-center'>Warehouse</p>
+            <p className='text-center'>Item</p>
         </div>
     </div>
   )

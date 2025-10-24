@@ -5,7 +5,7 @@ import Home from './pages/Home'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <div className='flex flex-col justify-between min-h-lvh'>
+    <div className='flex flex-col justify-between min-h-lvh items-center w-full '>
       <div>
         <JLBoxHeader></JLBoxHeader>
         <Home></Home>
@@ -20,7 +20,7 @@ createRoot(document.getElementById('root')).render(
 
 function JLBoxHeader() {
   return (
-    <header className="navbar bg-base-100 shadow-sm justify-between py-4">
+    <header className="navbar bg-base-100 shadow-sm justify-between py-4 mt-4">
       <div className="flex max-w-2xs">
         <a className="btn btn-ghost text-xl">JLBox</a>
       </div>
