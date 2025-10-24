@@ -29,5 +29,5 @@ PYTHON_DB_ACC_PORT =
 Como tecnologías principales empleadas encontramos las siguientes:
 - Backend: Python, FastAPI, Pytest, Pydantic
 - Persistencia: MariaDB
-- Frontend: JavaScript, React, Tailwindcss, Shadcn
+- Frontend: JavaScript, React, Tailwindcss, DaisyUI
 
