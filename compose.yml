@@ -33,6 +33,24 @@ services:
     restart: "no"
     depends_on:
       - mariadb
+    expose:
+      - 8000
+  web:
+    build:
+      context: ./web
+      target: builder
+    volumes:
+      - ./web:/web
+      - /web/node_modules
+    environment:
+      API_HOST: "api"
+      API_PORT: 8000
+      CHOKIDAR_USEPOLLING: true
+    ports:
+      - '5173:5173'
+    restart: "no"
+    expose:
+      - 5173
 
 volumes:
   db_data:
