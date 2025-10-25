@@ -31,7 +31,6 @@ const Home = () => {
                 return (<WarehouseCard key={`wh-${wh[0]}`} whName={wh[1]}></WarehouseCard>)
               })
             }
-            {console.log(warehouses["warehouses"])}
             {warehouses["warehouses"].length<6&&(
               <WarehouseCard></WarehouseCard>
             )}
@@ -64,10 +63,34 @@ function WarehouseCard({whName, whItems}) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
-  const printData = () => {
+  const postData = async () => {
       const data = { name, description };
+      const payload = {
+        name: name,
+        description: description,
+        owner_id: 1
+      }
       console.log("Datos del formulario:", data);
-      // Aquí podrías hacer algo más, como enviar a un backend
+      try{
+          const response = await fetch("http://localhost:8000/wh/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          });
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error al crear warehouse:", errorData);
+            return;
+          }
+
+          const data = await response.json();
+          console.log("Warehouse creada:", data);
+      }catch(err){
+        console.log("Error en la peticion:",err)
+      }
+      
       document.getElementById('my_modal_2').close(); // Cierra el modal
   };
 
@@ -92,7 +115,7 @@ function WarehouseCard({whName, whItems}) {
 
                 <label className="label">Description</label>
                 <textarea type="text" className="textarea " placeholder="Description" maxLength={250} value={description} onChange={(e) => setDescription(e.target.value)} />
-                <button className="btn btn-neutral mt-4" onClick={printData}>Create</button>
+                <button className="btn btn-neutral mt-4" onClick={postData}>Create</button>
               </fieldset>
               <p className="py-4">Press ESC key or click outside to close</p>
             </div>
