@@ -1,15 +1,43 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const Home = () => {
+  const [warehouses, setWarehouses] = useState({})
+  const [loading, setLoading] = useState(true)
+  const apiGetUrl = "http://localhost:8000/wh/1"
+  useEffect(()=>{
+    fetch(apiGetUrl).then(
+      (response) =>{
+        if(!response.ok) throw new Error(`Error while fetching warehouses.`)
+          return response.json()
+      }).then((data) => {setWarehouses(data);setLoading(false);})
+
+
+  }, [])
+  if (loading){
+    return(
+      <div className='flex flex-row justify-center py-10'>
+        <p>Fetching data...</p>
+      </div>
+
+    )
+  }
   return (
+    
     <div className='flex flex-col justify-center align-middle items-center min-h-full min-w-md sm:w-lg md:w-2xl lg:w-4xl xl:w-5xl'>
+      
         <section className='grid grid-cols-3 w-full gap-2 p-8 shadow-sm'>
-            <WarehouseCard></WarehouseCard>
-            <WarehouseCard></WarehouseCard>
-            <WarehouseCard></WarehouseCard>
-            <WarehouseCard></WarehouseCard>
-            <WarehouseCard></WarehouseCard>
-            <WarehouseCard></WarehouseCard>
+            {
+              warehouses["warehouses"].map((wh) => {
+                return (<WarehouseCard key={`wh-${wh[0]}`} whName={wh[1]}></WarehouseCard>)
+              })
+            }
+            {console.log(warehouses["warehouses"])}
+            {warehouses["warehouses"].length<6&&(
+              <WarehouseCard></WarehouseCard>
+            )}
+            
+            
+            
         </section>
 
         
@@ -32,16 +60,51 @@ const Home = () => {
   )
 }
 
-function WarehouseCard() {
-  return (
-    <div className='bg-neutral-200 min-h-20'>
-        <div className='bg-neutral-300 h-8 flex flex-col w-full justify-center a'>
-            <p className='text-center'>Warehouse</p>
-        </div>
+function WarehouseCard({whName, whItems}) {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
+  const printData = () => {
+      const data = { name, description };
+      console.log("Datos del formulario:", data);
+      // Aquí podrías hacer algo más, como enviar a un backend
+      document.getElementById('my_modal_2').close(); // Cierra el modal
+  };
+
+  return (
+    <div className='bg-neutral-200 min-h-20 flex flex-col justify-between pb-1'>
+        <div className='bg-neutral-300 h-8 flex flex-col w-full justify-center a'>
+          <p className='text-center'>{whName? whName: "Warehouse"}</p>
+            
+        </div>
+        <div className='flex flex-row w-full align-middle justify-center p-1'>
+        {whItems&&(<p className='pb-4'>{whItems} items</p>)}
+        </div>
+        {!whName&&(<div className='flex flex-row w-full align-middle justify-center p-1'>
+          <button className="btn btn-secondary text-center p-4" onClick={()=>document.getElementById('my_modal_2').showModal()}>New warehouse</button>
+          <dialog id="my_modal_2" className="modal">
+            <div className="modal-box align-middle justify-center flex flex-col items-center">
+              <h3 className="font-bold text-lg mb-4">New Warehouse Form</h3>
+              <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+
+                <label className="label">Name*</label>
+                <input type="text" className="input validator" placeholder="Name" required maxLength={90} value={name} onChange={(e)=>setName(e.target.value)}/>
+
+                <label className="label">Description</label>
+                <textarea type="text" className="textarea " placeholder="Description" maxLength={250} value={description} onChange={(e) => setDescription(e.target.value)} />
+                <button className="btn btn-neutral mt-4" onClick={printData}>Create</button>
+              </fieldset>
+              <p className="py-4">Press ESC key or click outside to close</p>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
+        </div>)}
     </div>
   )
 }
+
 function ItemsGridHeader() {
   return (
     <div className='flex flex-row justify-end w-full mb-4'>
