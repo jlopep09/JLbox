@@ -5,7 +5,7 @@ from fastapi import HTTPException, status
 from pydantic import BaseModel
 router = APIRouter(prefix="/wh", tags=["Warehouses"])
 
-
+#TODO Hay un error ocn los cursores y las conexions, revisar cual debe ser global y cuando deben abrirse cerrarse
 
 @router.get("/{owner_id}")
 async def get_all_wh_from_user_id(owner_id: int):
