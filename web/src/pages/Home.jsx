@@ -31,7 +31,7 @@ const Home = () => {
         <section className='grid grid-cols-3 w-full gap-2 p-8 shadow-sm'>
             {
               warehouses["warehouses"].map((wh) => {
-                return (<WarehouseCard key={`wh-${wh[0]}`} whName={wh[1]} whId={wh[0]} whOwner={1} refresh = {fetchWarehouses}></WarehouseCard>)
+                return (<WarehouseCard key={`wh-${wh[0]}`} whName={wh[1]} whId={wh[0]} whOwner={1} whDescription={wh[2]} refresh = {fetchWarehouses}></WarehouseCard>)
               })
             }
             {warehouses["warehouses"].length<6&&(
@@ -62,7 +62,7 @@ const Home = () => {
   )
 }
 
-function WarehouseCard({whName, whItems, whId, whOwner, refresh}) {
+function WarehouseCard({whName, whItems, whId, whOwner, refresh, whDescription}) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -73,7 +73,7 @@ function WarehouseCard({whName, whItems, whId, whOwner, refresh}) {
         description: description,
         owner_id: 1
       }
-      console.log("Datos del formulario:", data);
+      
       try{
           const response = await fetch("http://localhost:8000/wh/", {
             method: "POST",
@@ -89,13 +89,13 @@ function WarehouseCard({whName, whItems, whId, whOwner, refresh}) {
           }
 
           const data = await response.json();
-          console.log("Warehouse creada:", data);
+          
           await refresh() //fetch warehouses
       }catch(err){
         console.log("Error en la peticion:",err)
       }
       
-      document.getElementById('my_modal_2').close(); // Cierra el modal
+      document.getElementById('my_modal_2')?.close(); // Cierra el modal
   };
   const deleteWarehouse = async() =>{
       const payload = {
@@ -117,7 +117,7 @@ function WarehouseCard({whName, whItems, whId, whOwner, refresh}) {
           }
 
           const data = await response.json();
-          console.log("Deleted warehouse:", data);
+          
           await refresh() //fetch warehouses
       }catch(err){
         console.log("Error en la peticion:",err)
@@ -145,6 +145,7 @@ function WarehouseCard({whName, whItems, whId, whOwner, refresh}) {
         </div>
         <div className='flex flex-row w-full align-middle justify-center p-1'>
         {whItems&&(<p className='pb-4'>{whItems} items</p>)}
+        {whDescription&&(<p className='pb-4'>{whDescription}</p>)}
         </div>
         {!whName&&(<div className='flex flex-row w-full align-middle justify-center p-1'>
           <button className="btn btn-secondary text-center p-4" onClick={()=>document.getElementById('my_modal_2').showModal()}>New warehouse</button>
@@ -173,11 +174,13 @@ function WarehouseCard({whName, whItems, whId, whOwner, refresh}) {
 
 function ItemsGridHeader() {
   return (
-    <div className='flex flex-row justify-end w-full mb-4'>
+    <div className='flex flex-row justify-end w-full mb-4 gap-2'>
+        <button className='btn'>New item</button>
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className="btn px-15">
             Filtros
           </div>
+          
           <ul
             tabIndex="-1"
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 p-2 shadow">
