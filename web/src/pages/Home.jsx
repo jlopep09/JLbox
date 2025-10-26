@@ -3,12 +3,13 @@ import WarehouseCard from "./../components/home/WarehouseCard"
 import ItemsGridHeader from "./../components/home/ItemsGridHeader"
 import ItemCard from "./../components/home/ItemCard"
 
+
 const Home = () => {
   const [warehouses, setWarehouses] = useState({})
   const [loadingWh, setLoadingWh] = useState(true)
-  const get_wh_url = "http://localhost:8000/wh/1"
+  const get_wh_url = `${import.meta.env.VITE_API_URL}/wh/1`
   
-  const get_items_url = "http://localhost:8000/items/1"
+  const get_items_url = `${import.meta.env.VITE_API_URL}/items/1`
   const [items, setItems] = useState([])
   const [offset, setOffset] = useState(0)
   const [limit, setLimit] = useState(30)

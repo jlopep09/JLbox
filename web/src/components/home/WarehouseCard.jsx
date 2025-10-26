@@ -13,7 +13,7 @@ function WarehouseCard({whName, whItems, whId, whOwner, refresh, whDescription})
       }
       
       try{
-          const response = await fetch("http://localhost:8000/wh/", {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/wh/`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
@@ -41,7 +41,7 @@ function WarehouseCard({whName, whItems, whId, whOwner, refresh, whDescription})
         owner_id: whOwner
       }
       try{
-          const response = await fetch("http://localhost:8000/wh/", {
+          const response = await fetch(`${import.meta.env.API_URL}/wh/`, {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json"
