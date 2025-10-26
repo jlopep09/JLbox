@@ -14,12 +14,13 @@ const Home = () => {
   const [offset, setOffset] = useState(0)
   const [limit, setLimit] = useState(30)
   const [loadingItems, setLoadingItems] = useState(true)
+  const [filter, setFilter] = useState("desc")
   
 
   const fetchItems = async () => {
   setLoadingItems(true);
   try {
-    const response = await fetch(`${get_items_url}?offset=${offset}&limit=${limit}`);
+    const response = await fetch(`${get_items_url}?offset=${offset}&limit=${limit}&filter=${filter}`);
     const data = await response.json();
 
     if (data.items && Array.isArray(data.items)) {
@@ -44,7 +45,13 @@ const Home = () => {
 };
   useEffect(() => {
       fetchItems();
-    }, []);
+    }, [offset, limit]);
+    useEffect(() => {
+      setOffset(0);
+      setLimit(30);
+      setItems([]);
+      fetchItems();
+    }, [filter]);
   const fetchWarehouses = async () => {
     setLoadingWh(true);
     const response = await fetch(get_wh_url);
@@ -84,7 +91,7 @@ const Home = () => {
 
         
         <section className='flex flex-col w-full mt-8 pt-4 p-8 shadow-sm'>
-            <ItemsGridHeader></ItemsGridHeader>
+            <ItemsGridHeader filter={filter} setFilter = {setFilter}></ItemsGridHeader>
             <article className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 gap-2'>
                 {items.map((item => {
                   return (<ItemCard key={`it-${item[0]}`} itemName = {item[1]}></ItemCard>)

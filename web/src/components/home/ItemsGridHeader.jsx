@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ItemsGridHeader() {
+function ItemsGridHeader({filter, setFilter}) {
   return (
     <div className='flex flex-row justify-end w-full mb-4 gap-2'>
         <button className='btn'>New item</button>
@@ -12,8 +12,8 @@ function ItemsGridHeader() {
           <ul
             tabIndex="-1"
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 p-2 shadow">
-            <li ><p>Recientes primero</p></li>
-            <li><p>Antiguos primero</p></li>
+            <li onClick={()=>{setFilter("asc")}}><p>{filter=="asc"&&(<span>o</span>)}Recientes primero</p></li>
+            <li onClick={()=>{setFilter("desc")}}><p>{filter=="desc"&&(<span>o</span>)}Antiguos primero</p></li>
           </ul>
         </div>
 
