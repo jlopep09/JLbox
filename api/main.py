@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from api.db.db_conector import conn,cur
 from api.routers.router_warehouse import router as router_wh
 from api.routers.router_box import router as router_box
 from api.routers.router_item import router as router_item

@@ -18,31 +18,31 @@ if os.getenv('PYTHON_DB_HOST') is None:
             path_env = Path(path_env)
             load_dotenv(dotenv_path=path_env)
 else:
-    env_loaded = True
-
+    env_loaded = True  
 
     
-              
 
-
-# Connect to MariaDB Platform
-try:
-    if not env_loaded:
-        raise Exception("Error, no se han conseguido cargar las variables de entorno necesarias. Se necesita gestión por parte del usuario.")
-    time.sleep(5)
-    print(os.getenv('PYTHON_DB_HOST'))
-    conn = mariadb.connect(
-        user= os.getenv('MYSQL_USER'),
-        password=os.getenv('MYSQL_PASSWORD'),
-        host=os.getenv('PYTHON_DB_HOST'),
-        port=int(os.getenv('PYTHON_DB_ACC_PORT')),
-        database=os.getenv('MYSQL_DATABASE')
-    )
-except mariadb.Error as e:
-    print(f"Error connecting to MariaDB Platform: {e}")
-    sys.exit(1)
-except Exception as es:
-    print(f"Se ha productido un error insesperado: {es}")
-
-# Get Cursor
-cur = conn.cursor()
+def get_connection():
+    # Connect to MariaDB Platform
+    try:
+        if not env_loaded:
+            raise Exception("Error, no se han conseguido cargar las variables de entorno necesarias. Se necesita gestión por parte del usuario.")
+        
+        print(os.getenv('PYTHON_DB_HOST'))
+        conn = mariadb.connect(
+            user= os.getenv('MYSQL_USER'),
+            password=os.getenv('MYSQL_PASSWORD'),
+            host=os.getenv('PYTHON_DB_HOST'),
+            port=int(os.getenv('PYTHON_DB_ACC_PORT')),
+            database=os.getenv('MYSQL_DATABASE')
+        )
+        try:
+            yield conn
+        finally:
+            conn.close()
+    except mariadb.Error as e:
+        print(f"Error connecting to MariaDB Platform: {e}")
+        raise Exception("Error connecting to MariaDB Platform")
+    except Exception as es:
+        print(f"Se ha productido un error insesperado: {es}")
+        raise Exception("Se ha productido un error insesperado")
