@@ -47,11 +47,15 @@ const Home = () => {
       fetchItems();
     }, [offset, limit]);
     useEffect(() => {
-      setOffset(0);
-      setLimit(30);
-      setItems([]);
-      fetchItems();
+      resetItemVariables();
     }, [filter]);
+
+  function resetItemVariables(){
+    setOffset(0);
+    setLimit(30);
+    setItems([]);
+    fetchItems();
+  }
   const fetchWarehouses = async () => {
     setLoadingWh(true);
     const response = await fetch(get_wh_url);
@@ -91,7 +95,7 @@ const Home = () => {
 
         
         <section className='flex flex-col w-full mt-8 pt-4 p-8 shadow-sm'>
-            <ItemsGridHeader filter={filter} setFilter = {setFilter}></ItemsGridHeader>
+            <ItemsGridHeader filter={filter} setFilter = {setFilter} warehouses={warehouses["warehouses"]} refresh={resetItemVariables}></ItemsGridHeader>
             <article className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 gap-2'>
                 {items.map((item => {
                   return (<ItemCard key={`it-${item[0]}`} itemName = {item[1]}></ItemCard>)

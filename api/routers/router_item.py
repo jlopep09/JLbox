@@ -1,4 +1,6 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException,status
+from pydantic import BaseModel
 from api.db.db_conector import get_connection
 router = APIRouter(prefix="/items", tags=["Items"])
 
@@ -15,5 +17,23 @@ async def get_items(user_id: int, offset:int = 0, limit:int = 30, filter:str = "
         return {"items": result}
     except:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No se ha podido cargar los objetos solicitados.")
+    finally:
+        cur.close()
+
+class CreateItem(BaseModel):
+    name: str
+    description: Optional[str] = None
+    count: Optional[int] = 1
+    owner_id: int 
+    box_id: int
+
+@router.post("/")
+async def create_items(item:CreateItem, conn = Depends(get_connection)):
+    try:
+        cur = conn.cursor()
+        cur.execute("INSERT INTO items(name, description, count, box_id, owner_id) VALUES (%s, %s, %s, %s, %s)", (item.name, item.description, item.count, item.box_id, item.owner_id))
+        conn.commit()
+    except:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No se ha podido crear el nuevo item.")
     finally:
         cur.close()
